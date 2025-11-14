@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Prisma Future — Cover Art for Music Artists</title>
+
+<meta name="description" content="Custom cover art and premium visual design for music artists, producers, and labels. High-impact artwork crafted with the Prisma Future aesthetic." />
+<link rel="canonical" href="https://prismafuture.com/" />
+
+<!-- Social -->
+<meta property="og:title" content="Prisma Future — Cover Art for Music Artists" />
+<meta property="og:description" content="Custom cover art crafted for music artists and producers." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://prismafuture.com/" />
+<meta property="og:image" content="https://prismafuture.com/og-image.jpg" />
+
+<!-- Inline styles -->
+<style>
+:root{
+  --accent: hsl(240,80%,60%);
+}
+@font-face {
+  font-family: "PrismaFuture";
+  src: url("./fonts/PrismaFuture.woff2") format("woff2"),
+       url("./fonts/PrismaFuture.woff") format("woff");
+}
+
+body {
+  /* phasing background driven by --accent (updated by JS while hovering)
+     keep the page visually dark but allow the gradient to phase */
+  background: linear-gradient(90deg, #000 0%, var(--accent) 50%, #060606 100%);
+  transition: background 220ms linear;
+  color:#fff;
+  font-family:"PrismaFuture", sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;      /* allow padding while keeping full viewport coverage */
+  margin:0;
+  padding:4vh 2vw;       /* avoid clipping at edges and make space for subtext */
+  box-sizing:border-box;
+  text-align:center;
+  overflow:hidden;       /* keep scrollbar hidden as requested */
+}
+
+/* Main text effect */
+h1 {
+  /* allow the headline to shrink so it can fit on one line on narrow viewports */
+  font-size:clamp(1rem, 7.5vw, 10rem);
+  position:relative;
+  cursor:pointer;
+  transition:color .3s ease;
+  margin:0;
+  white-space:nowrap;         /* keep the text on a single line */
+  overflow-wrap:normal;
+  word-break:keep-all;
+  max-width:96vw;            /* prevent overflowing the viewport a bit */
+  line-height:1;
+  text-shadow:0 6px 18px rgba(0,0,0,0.6), 0 0 40px rgba(127,91,255,0.06);
+}
+h1:hover {
+  color:#7f5bff;
+  filter:drop-shadow(0 0 20px #7f5bff);
+}
+h1::after {
+  content:attr(data-text);
+  position:absolute;
+  top:0; left:0;
+  color:#7f5bff;
+  opacity:0;
+  mix-blend-mode:difference;
+  transition:opacity .25s ease;
+}
+h1:hover::after {
+  opacity:1;
+  animation:glitch .4s steps(4) infinite alternate;
+}
+@keyframes glitch {
+  0%   { transform:translate(2px,-2px); }
+  25%  { transform:translate(-3px,3px); }
+  50%  { transform:translate(3px,2px); }
+  75%  { transform:translate(-2px,-3px); }
+  100% { transform:translate(2px,1px); }
+}
+
+/* Coming soon animation */
+p#comingsoon {
+  margin-top:1.5rem;
+  font-size:1.2rem;
+  opacity:.8;
+  letter-spacing:0.1em;
+  animation:spread 2.5s ease-in-out infinite;
+}
+
+@keyframes spread {
+  0%   { letter-spacing:0.1em; opacity:0.7; transform:scale(1); }
+  40%  { letter-spacing:0.8em; opacity:1; transform:scale(1.05); }
+  100% { letter-spacing:0.1em; opacity:0.7; transform:scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+  <h1 class="glitch" data-text="Cover Art for Music Artists">Cover Art for Music Artists</h1>
+
+  <p id="comingsoon">coming soon</p>
+
+<script>
+// Mirror the headline for the glitch effect
+const glitch = document.querySelector(".glitch");
+// Mirror the headline for the glitch effect
+if (glitch) {
+  glitch.setAttribute("data-text", glitch.innerText);
+
+  // Dynamic shimmer effect — only while hovering the headline.
+  // Use mouse X relative to the whole viewport so color phases across the page width.
+  glitch.addEventListener("mousemove", e => {
+    const x = e.clientX / window.innerWidth; // viewport-relative
+    document.documentElement.style.setProperty("--accent", `hsl(${200 + x*100}, 80%, 60%)`);
+  });
+
+  // Clear the accent when the mouse leaves the headline
+  glitch.addEventListener("mouseleave", () => {
+    // reset to a subtle default (keeps background dark but removes the bright phase)
+    document.documentElement.style.setProperty("--accent", 'hsl(240,20%,10%)');
+  });
+}
+</script>
+
+</body>
+</html>
